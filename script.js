@@ -20,50 +20,68 @@ function playRound(playerSelection, computerSelection = computerPlay()){
     return result;
 }
 
-function game(){
-    let score = 0 , 
+function game(playerSelection){
+
+    console.log('Round ' + currentRound);
+    let match = playRound(playerSelection);
+    if(match == 0){
+        printResult(`Draw! <br>${score} - ${scoreComputer}`);
+    }
+    else if(match == 1){
+        scoreComputer++;
+        printResult(`You Lose! Paper beats Rock <br>${score} - ${scoreComputer}`);
+    }
+    else if(match == 2){
+        score++;
+        printResult(`You Win! Rock beats Scissors <br>${score} - ${scoreComputer}`);
+    }
+    else if(match == 3){
+        score++;
+        printResult(`You Win! Paper beats Rock <br>${score} - ${scoreComputer}`);
+    }
+    else if(match == 4){
+        scoreComputer++;
+        printResult(`You Lose! Scissors beats Paper <br>${score} - ${scoreComputer}`);
+    }
+    else if(match == 5){
+        scoreComputer++;
+        printResult(`You Lose! Rock beats Scissors <br>${score} - ${scoreComputer}`);
+    }
+    else if(match == 6){
+        score++;
+        printResult(`You Win! Scissors beats Paper <br>${score} - ${scoreComputer}`);
+    }
+    currentRound += 1;
+
+    if(score == rounds){
+        printResult('You win! <br>You: ' + score + ' <br>Computer: ' + scoreComputer)
+        score = 0;
         scoreComputer = 0;
-    for(let i = 1; i<=rounds; i++){
-        console.log('Round ' + i);
-        let playerSelection = prompt('Type in rock, paper or scissors');
-        let match = playRound(playerSelection);
-        if(match == 0){
-            console.log('Draw!');
-        }
-        else if(match == 1){
-            console.log('You Lose! Paper beats Rock');
-            scoreComputer++;
-        }
-        else if(match == 2){
-            console.log('You Win! Rock beats Scissors');
-            score++;
-        }
-        else if(match == 3){
-            console.log('You Win! Paper beats Rock');
-            score++;
-        }
-        else if(match == 4){
-            console.log('You Lose! Scissors beats Paper');
-            scoreComputer++;
-        }
-        else if(match == 5){
-            console.log('You Lose! Rock beats Scissors');
-            scoreComputer++;
-        }
-        else if(match == 6){
-            console.log('You Win! Scissors beats Paper');
-            score++;
-        }
+        currentRound = 1;
     }
-    if(score > scoreComputer){
-        console.log('You win! \nYou: ' + score + ' \nComputer: ' + scoreComputer)
+    else if(scoreComputer == rounds){
+        printResult('You lose! <br>You: ' + score + ' <br>Computer: ' + scoreComputer)
+        score = 0;
+        scoreComputer = 0;
+        currentRound = 1;
     }
-    else if(score < scoreComputer){
-        console.log('You lose! \nYou: ' + score + ' \nComputer: ' + scoreComputer)
-    }
-    else{
-        console.log('Draw! \nYou: ' + score + ' \nComputer: ' + scoreComputer)
-    }
+
 }
 
+function printResult(result){
+    const div = document.querySelector('div[id="result"]');
+    div.innerHTML = result;
+}
+
+const btns = document.querySelectorAll('button');
+const h1 = document.querySelector('h1');
+btns.forEach(btn => btn.addEventListener('click', function(e){
+    let playerSelection = e.target.getAttribute('data-value');
+    game(playerSelection);
+    h1.innerHTML = `Round ${currentRound}`;
+}));
+
 let rounds = 5;
+let score = 0;
+let scoreComputer = 0;
+let currentRound = 1;
